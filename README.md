@@ -1,46 +1,65 @@
+<div align="center">
+
 ## React & Redux in TypeScript - Static Typing Guide
 
 _"This guide is a **living compendium** documenting the most important patterns and recipes on how to use **React** (and its Ecosystem) in a **functional style** using **TypeScript**. It will help you make your code **completely type-safe** while focusing on **inferring the types from implementation** so there is less noise coming from excessive type annotations and it's easier to write and maintain correct types in the long run."_
 
 [![Join the chat at https://gitter.im/react-redux-typescript-guide/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/react-redux-typescript-guide/Lobby)  
-> #### _Found it useful? Want more updates?_ [**Show your support by giving a :star:**](https://github.com/piotrwitek/react-redux-typescript-guide/stargazers)  
 
-:tada: _Now updated to be compatible with **TypeScript v3.1.6**_ :tada:  
+:star: _Found it useful? Want more updates?_ [**Show your support by giving a :star:**](https://github.com/piotrwitek/react-redux-typescript-guide/stargazers)  
 
-:computer: _Reference implementation of Todo-App with `typesafe-actions`: https://codesandbox.io/s/github/piotrwitek/typesafe-actions/tree/master/codesandbox_ :computer:  
+:tada: _Now updated to support **TypeScript v3.4**_ :tada:
 
-### Goals
+<a href="https://www.buymeacoffee.com/zh9guxbA5">
+  <img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me a Coffee">
+</a>
+<a href="https://www.patreon.com/piotrekwitek">
+  <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" alt="Become a Patron" width="160">
+</a>
+
+</div>
+
+**Goals**
+
 - Complete type safety (with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag) without losing type information downstream through all the layers of our application (e.g. no type assertions or hacking with `any` type)
 - Make type annotations concise by eliminating redundancy in types using advanced TypeScript Language features like **Type Inference** and **Control flow analysis**
 - Reduce repetition and complexity of types with TypeScript focused [complementary libraries](#complementary-libraries)
 
-### Complementary Libraries
-- [utility-types](https://github.com/piotrwitek/utility-types) - Collection of generic types for TypeScript, complementing built-in mapped types and aliases - think lodash for reusable types.  
-- [typesafe-actions](https://github.com/piotrwitek/typesafe-actions) - Typesafe utilities for "action-creators" in Redux / Flux Architecture  
-- [react-redux-typescript-scripts](https://github.com/piotrwitek/react-redux-typescript-scripts) - dev-tools configuration files shared between projects based on this guide
+**React, Redux, Typescript Ecosystem**
 
-### Playground Project
+- [typesafe-actions](https://github.com/piotrwitek/typesafe-actions) - Typesafe utilities for "action-creators" in Redux / Flux Architecture  
+- [utility-types](https://github.com/piotrwitek/utility-types) - Collection of generic types for TypeScript, complementing built-in mapped types and aliases - think lodash for reusable types.  
+- [react-redux-typescript-scripts](https://github.com/piotrwitek/react-redux-typescript-scripts) - dev-tools configuration files shared between projects based on this guide  
+
+**Codesandbox links**
+
+- Reference Todo-App implementation using **React, Redux, Typescript Guide**: [Link](https://codesandbox.io/s/github/piotrwitek/typesafe-actions/tree/master/codesandbox)
+
+**Playground Project**
+
 [![Build Status](https://semaphoreci.com/api/v1/piotrekwitek/react-redux-typescript-guide/branches/master/shields_badge.svg)](https://semaphoreci.com/piotrekwitek/react-redux-typescript-guide)
 
-You should check out Playground Project located in the `/playground` folder. It is a source of all the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type-definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions.
-> Playground was created in such a way that you can simply clone the repository locally and immediately play around on your own. It will help you to learn all the examples from this guide in a real project environment without the need to create some complicated environment setup by yourself.
+You should check out Playground Project located in the `/playground` folder. It is a source of all the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type-definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions. It's based on `create-react-app --typescript`.
+> Playground project was created so that you can simply clone the repository locally and immediately play around with all the component patterns found in the guide. It will help you to learn all the examples from this guide in a real project environment without the need to create complicated environment setup by yourself.
 
 ## Contributing Guide
 We are open for contributions. If you're planning to contribute please make sure to read the contributing guide: [CONTRIBUTING.md](/CONTRIBUTING.md)
 
-## Sponsor
+## Funding
 This is an independent open-source project created by people investing their free time for the benefit of our community.
 
 If you are using it please consider donating as this will guarantee the project will be updated and maintained in the long run.
 
-Issues can be funded by anyone and the money will be transparently distributed to the contributors handling a particular issue.
+Issues can be funded by anyone interested in them being resolved. Reward will be transparently distributed to the contributor handling the task through the IssueHunt platform.
 
 [![Let's fund issues in this repository](https://issuehunt.io/static/embed/issuehunt-button-v1.svg)](https://issuehunt.io/repos/76996763)
 
 ---
 
+🌟 - _New or updated section_
+
 ## Table of Contents
-- [Introduction](#introduction)
+- [Installation](#installation)
 - [React - Type-Definitions Cheatsheet](#react---type-definitions-cheatsheet)
 - [React - Typing Patterns](#react---typing-patterns)
   - [Function Components - FC](#function-components---fc)
@@ -49,26 +68,29 @@ Issues can be funded by anyone and the money will be transparently distributed t
   - [Render Props](#render-props)
   - [Higher-Order Components](#higher-order-components)
   - [Redux Connected Components](#redux-connected-components)
-  - [Context](#context) 🌟 __NEW__
-  - [Hooks](#hooks) 🌟 __NEW__
+  - [Context](#context)
+  - [Hooks](#hooks) 🌟
 - [Redux - Typing Patterns](#redux---typing-patterns)
   - [Store Configuration](#store-configuration)
   - [Action Creators](#action-creators)
   - [Reducers](#reducers)
     - [State with Type-level Immutability](#state-with-type-level-immutability)
-    - [Typing reducer](#typing-reducer)
+    - [Typing regular reducer](#typing-regular-reducer)
+    - [Typing reducer with `typesafe-actions`](#typing-reducer-with-typesafe-actions) 🌟
     - [Testing reducer](#testing-reducer)
   - [Async Flow with `redux-observable`](#async-flow-with-redux-observable)
     - [Typing Epics](#typing-epics)
     - [Testing Epics](#testing-epics)
-  - [Async Flow with `redux-thunk`](#async-flow-with-redux-thunk) 🌟 __NEW__
   - [Selectors with `reselect`](#selectors-with-reselect)
-  - [Connect with `react-redux`](#connect-with-react-redux) 🌟 __NEW__
-- [Configuration & Dev Tools](#configuration-&-dev-tools)
+  - [Connect with `react-redux`](#connect-with-react-redux)
+    - [Typing connected component](#typing-connected-component)
+    - [Typing connected component using `redux-thunk` action creators](#typing-connected-component-using-redux-thunk-action-creators) 🌟
+- [Configuration & Dev Tools](#configuration--dev-tools)
   - [Common Npm Scripts](#common-npm-scripts)
   - [TypeScript](#typescript)
   - [TSLib](#tslib)
   - [TSLint](#tslint)
+  - [ESLint](#eslint) 🌟
   - [Jest](#jest)
   - [Style Guide](#style-guide)
 - [Recipes](#recipes)
@@ -81,7 +103,7 @@ Issues can be funded by anyone and the money will be transparently distributed t
 
 ---
 
-# Introduction
+# Installation
 
 ### Type-Definitions for React & Redux
 ```
@@ -101,33 +123,33 @@ npm i -D @types/react @types/react-dom @types/react-redux
 
 # React - Type-Definitions Cheatsheet
 
-#### `React.FunctionComponent<P>` or `React.FC<P>`
+#### `React.FC<Props>` | `React.FunctionComponent<Props>`
 Type representing a functional component
 ```tsx
 const MyComponent: React.FC<Props> = ...
 ```
 
-#### `React.Component<P, S>`
+#### `React.Component<Props, State>`
 Type representing a class component
 ```tsx
 class MyComponent extends React.Component<Props, State> { ...
 ```
 
-#### `React.ComponentProps<typeof Component>`
-Gets type of Component Props, so you don't need to export Props from your component ever! (Works for both FC and Class components)
-```tsx
-type MyComponentProps = React.ComponentProps<typeof MyComponent>;
-```
-
-#### `React.ComponentType<P>`
-Type representing union type of (React.FC | React.Component)
+#### `React.ComponentType<Props>`
+Type representing union of (React.FC<Props> | React.Component<Props>) - used in HOC
 ```tsx
 const withState = <P extends WrappedComponentProps>(
   WrappedComponent: React.ComponentType<P>,
 ) => { ...
 ```
 
-#### `React.ReactElement<P>` or `JSX.Element`
+#### `React.ComponentProps<typeof XXX>`
+Gets Props type of a specified component XXX (WARNING: does not work with statically declared default props and generic props)
+```tsx
+type MyComponentProps = React.ComponentProps<typeof MyComponent>;
+```
+
+#### `React.ReactElement` | `JSX.Element`
 Type representing a concept of React Element - representation of a native DOM component (e.g. `<div />`), or a user-defined composite component (e.g. `<MyComponent />`)
 ```tsx
 const elementOnly: React.ReactElement = <div /> || <MyComponent />;
@@ -141,22 +163,30 @@ const Component = ({ children: React.ReactNode }) => ...
 ```
 
 #### `React.CSSProperties`
-Type representing style object in JSX (useful for css-in-js styles)
+Type representing style object in JSX - for css-in-js styles
 ```tsx
 const styles: React.CSSProperties = { flexDirection: 'row', ...
 const element = <div style={styles} ...
 ```
 
-#### `React.ReactEventHandler<E>`
-Type representing generic event handler
+#### `React.HTMLProps<HTMLXXXElement>`
+Type representing Props of specified HTML Element - for extending HTML Elements
+```tsx
+const Input: React.FC<Props & React.HTMLProps<HTMLInputElement>> = props => { ... }
+
+<Input about={...} accept={...} alt={...} ... />
+```
+
+#### `React.ReactEventHandler<HTMLXXXElement>`
+Type representing generic event handler - for declaring event handlers
 ```tsx
 const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ... } 
 
 <input onChange={handleChange} ... />
 ```
 
-#### `React.MouseEvent<E>` | `React.KeyboardEvent<E>` | `React.TouchEvent<E>` etc...
-Type representing more specific event handler
+#### `React.XXXEvent<HTMLXXXElement>`
+Type representing more specific event handler. Some common event examples: `ChangeEvent, FormEvent, FocusEvent, KeyboardEvent, MouseEvent, DragEvent, PointerEvent, WheelEvent, TouchEvent`.
 ```tsx
 const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
@@ -469,8 +499,11 @@ interface InjectedProps {
 }
 
 export const withState = <BaseProps extends InjectedProps>(
-  BaseComponent: React.ComponentType<BaseProps>
+  _BaseComponent: React.ComponentType<BaseProps>
 ) => {
+  // fix for TypeScript issues: https://github.com/piotrwitek/react-redux-typescript-guide/issues/111
+  const BaseComponent = _BaseComponent as React.ComponentType<InjectedProps>;
+
   type HocProps = Subtract<BaseProps, InjectedProps> & {
     // here you can extend hoc with new props
     initialCount?: number;
@@ -494,7 +527,7 @@ export const withState = <BaseProps extends InjectedProps>(
     };
 
     render() {
-      const { ...restProps } = this.props as {};
+      const { ...restProps } = this.props;
       const { count } = this.state;
 
       return (
@@ -541,8 +574,11 @@ interface InjectedProps {
 }
 
 export const withErrorBoundary = <BaseProps extends InjectedProps>(
-  BaseComponent: React.ComponentType<BaseProps>
+  _BaseComponent: React.ComponentType<BaseProps>
 ) => {
+  // fix for TypeScript issues: https://github.com/piotrwitek/react-redux-typescript-guide/issues/111
+  const BaseComponent = _BaseComponent as React.ComponentType<InjectedProps>;
+
   type HocProps = Subtract<BaseProps, InjectedProps> & {
     // here you can extend hoc with new props
   };
@@ -574,9 +610,7 @@ export const withErrorBoundary = <BaseProps extends InjectedProps>(
     };
 
     render() {
-      const { children, ...restProps } = this.props as {
-        children: React.ReactNode;
-      };
+      const { children, ...restProps } = this.props;
       const { error } = this.state;
 
       if (error) {
@@ -597,7 +631,7 @@ export const withErrorBoundary = <BaseProps extends InjectedProps>(
 <details><summary><i>Click to expand</i></summary><p>
 
 ```tsx
-import * as React from 'react';
+import React, {useState} from 'react';
 
 import { withErrorBoundary } from '../hoc';
 import { ErrorMessage } from '../components';
@@ -605,11 +639,29 @@ import { ErrorMessage } from '../components';
 const ErrorMessageWithErrorBoundary =
   withErrorBoundary(ErrorMessage);
 
-const BrokenButton = () => (
-  <button type="button" onClick={() => { throw new Error(`Catch me!`); }}>
-    {`Throw nasty error`}
-  </button >
-);
+const BrokenComponent = () => {
+  throw new Error('I\'m broken! Don\'t render me.');
+};
+
+const BrokenButton = () => {
+  const [shouldRenderBrokenComponent, setShouldRenderBrokenComponent] =
+    useState(false);
+
+  if (shouldRenderBrokenComponent) {
+    return <BrokenComponent />;
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        setShouldRenderBrokenComponent(true);
+      }}
+    >
+      {`Throw nasty error`}
+    </button>
+  );
+};
 
 export default () => (
   <ErrorMessageWithErrorBoundary>
@@ -1022,11 +1074,18 @@ Can be imported in connected components to provide type-safety to Redux `connect
 Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
 
 ```tsx
+import { StateType, ActionType } from 'typesafe-actions';
+
 declare module 'MyTypes' {
-  import { StateType, ActionType } from 'typesafe-actions';
   export type Store = StateType<typeof import('./index').default>;
   export type RootAction = ActionType<typeof import('./root-action').default>;
-  export type RootState = StateType<typeof import('./root-reducer').default>;
+  export type RootState = StateType<ReturnType<typeof import('./root-reducer').default>>;
+}
+
+declare module 'typesafe-actions' {
+  interface Types {
+    RootAction: ActionType<typeof import('./root-action').default>;
+  }
 }
 
 ```
@@ -1042,11 +1101,16 @@ When creating a store instance we don't need to provide any additional types. It
 import { RootAction, RootState, Services } from 'MyTypes';
 import { createStore, applyMiddleware } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
+import { createBrowserHistory } from 'history';
+import { routerMiddleware as createRouterMiddleware } from 'connected-react-router';
 
 import { composeEnhancers } from './utils';
 import rootReducer from './root-reducer';
 import rootEpic from './root-epic';
 import services from '../services';
+
+// browser history
+export const history = createBrowserHistory();
 
 export const epicMiddleware = createEpicMiddleware<
   RootAction,
@@ -1057,8 +1121,10 @@ export const epicMiddleware = createEpicMiddleware<
   dependencies: services,
 });
 
+const routerMiddleware = createRouterMiddleware(history);
+
 // configure middlewares
-const middlewares = [epicMiddleware];
+const middlewares = [epicMiddleware, routerMiddleware];
 // compose enhancers
 const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 
@@ -1066,7 +1132,7 @@ const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 const initialState = {};
 
 // create store
-const store = createStore(rootReducer, initialState, enhancer);
+const store = createStore(rootReducer(history), initialState, enhancer);
 
 epicMiddleware.run(rootEpic);
 
@@ -1082,7 +1148,7 @@ export default store;
 > We'll be using a battle-tested library [![NPM Downloads](https://img.shields.io/npm/dm/typesafe-actions.svg)](https://www.npmjs.com/package/typesafe-actions)
  that'll help retain complete type soundness and simplify maintenace of **types in Redux Architectures** [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions#typesafe-actions)
 
-> You can find more real-world examples and in-depth tutorial in: [Typesafe-Actions - The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial)!
+> You can find more real-world examples and in-depth tutorial in: [Typesafe-Actions - Tutorial](https://github.com/piotrwitek/typesafe-actions#tutorial)!
 
 A solution below is using a simple factory function to automate the creation of type-safe action creators. The goal is to decrease maintenance effort and reduce code repetition of type annotations for actions and creators. The result is completely typesafe action-creators and their actions.
 
@@ -1210,15 +1276,19 @@ import { Todo, TodosFilter } from './models';
 import * as actions from './actions';
 import { ADD, CHANGE_FILTER, TOGGLE } from './constants';
 
-export type TodosState = {
-  readonly todos: Todo[];
-  readonly todosFilter: TodosFilter;
-};
-
 export type TodosAction = ActionType<typeof actions>;
 
+export type TodosState = Readonly<{
+  todos: Todo[];
+  todosFilter: TodosFilter;
+}>;
+const initialState: TodosState = {
+  todos: [],
+  todosFilter: TodosFilter.All,
+};
+
 export default combineReducers<TodosState, TodosAction>({
-  todos: (state = [], action) => {
+  todos: (state = initialState.todos, action) => {
     switch (action.type) {
       case ADD:
         return [...state, action.payload];
@@ -1234,7 +1304,7 @@ export default combineReducers<TodosState, TodosAction>({
         return state;
     }
   },
-  todosFilter: (state = TodosFilter.All, action) => {
+  todosFilter: (state = initialState.todosFilter, action) => {
     switch (action.type) {
       case CHANGE_FILTER:
         return action.payload;
@@ -1243,6 +1313,49 @@ export default combineReducers<TodosState, TodosAction>({
         return state;
     }
   },
+});
+
+```
+
+[⇧ back to top](#table-of-contents)
+
+### Typing reducer with `typesafe-actions`
+> Notice we are not required to use any generic type parameter in the API. Try to compare it with regular reducer as they are equivalent.
+
+```tsx
+import { combineReducers } from 'redux';
+import { createReducer } from 'typesafe-actions';
+
+import { Todo, TodosFilter } from './models';
+import { ADD, CHANGE_FILTER, TOGGLE } from './constants';
+
+export type TodosState = Readonly<{
+  todos: Todo[];
+  todosFilter: TodosFilter;
+}>;
+const initialState: TodosState = {
+  todos: [],
+  todosFilter: TodosFilter.All,
+};
+
+const todos = createReducer(initialState.todos)
+  .handleAction(ADD, (state, action) => [...state, action.payload])
+  .handleAction(TOGGLE, (state, action) =>
+    state.map(item =>
+      item.id === action.payload
+        ? { ...item, completed: !item.completed }
+        : item
+    )
+  );
+
+const todosFilter = createReducer(initialState.todosFilter).handleAction(
+  CHANGE_FILTER,
+  (state, action) => action.payload
+);
+
+export default combineReducers({
+  todos,
+  todosFilter,
 });
 
 ```
@@ -1510,13 +1623,15 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 ## Common Npm Scripts
 > Common TS-related npm scripts shared across projects
 ```
-"ci-check": "npm run lint && npm run tsc && npm run test",
+"prettier": "prettier --list-different 'src/**/*.ts' || (echo '\nPlease fix code formatting by running:\nnpm run prettier:fix\n'; exit 1)",
+"prettier:fix": "prettier --write 'src/**/*.ts'",
 "lint": "tslint -p ./",
 "tsc": "tsc -p ./ --noEmit",
 "tsc:watch": "tsc -p ./ --noEmit -w",
 "test": "jest --config jest.config.json",
 "test:watch": "jest --config jest.config.json --watch",
 "test:update": "jest --config jest.config.json -u"
+"ci-check": "npm run prettier && npm run lint && npm run tsc && npm run test",
 ```
 
 [⇧ back to top](#table-of-contents)
@@ -1530,11 +1645,15 @@ We have our own recommended `tsconfig.json` that you can easily add to your proj
 
 ```tsx
 {
-  "include": ["src", "typings"],
+  "include": [
+    "src",
+    "typings"
+  ],
+  "exclude": [
+    "src/**/*.spec.*"
+  ],
   "extends": "./node_modules/react-redux-typescript-scripts/tsconfig.json",
-  "compilerOptions": {
-    // you can further customize options here
-  }
+  "compilerOptions": {}
 }
 
 ```
@@ -1575,8 +1694,36 @@ We have our own recommended config that you can easily add to your project thank
 ```tsx
 {
   "extends": [
-    "react-redux-typescript-scripts/tslint-recommended.json",
+    "react-redux-typescript-scripts/tslint.json",
     "react-redux-typescript-scripts/tslint-react.json"
+  ],
+  "rules": {
+    // you can further customize options here
+  }
+}
+
+```
+</p></details>
+
+[⇧ back to top](#table-of-contents)
+
+## ESLint
+https://eslint.org/  
+https://typescript-eslint.io
+
+> Installation  
+`npm i -D eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin`
+
+We have our own recommended config that will automatically add a parser & plugin for TypeScript thanks to [`react-redux-typescript-scripts`](https://github.com/piotrwitek/react-redux-typescript-scripts) package.
+
+#### .eslintrc
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+{
+  "extends": [
+    "react-app",
+    "./node_modules/react-redux-typescript-scripts/eslint.js"
   ],
   "rules": {
     // you can further customize options here
@@ -1755,7 +1902,7 @@ declare module 'rxjs/Subject' {
 }
 ```
 
-When creating 3rd party type-definitions all the imports should be kept inside the module decleration, otherwise it will be treated as augmentation and show error
+When creating 3rd party type-definitions all the imports should be kept inside the module declaration, otherwise it will be treated as augmentation and show error
 
 ```ts
 declare module "react-custom-scrollbars" {
